@@ -8,7 +8,7 @@
 
 ## References
 
-- **Official Challenge Files**: [CyberSCI / PastChallenges — nationals-2025-26 / defence / config](https://github.com/CyberSCI/PastChallenges/tree/main/challenges/nationals-2025-26/challenges/defence/config)
+- **Official Challenge Files**: [CyberSCI / PastChallenges — nationals-2025-26 / web / corpo](https://github.com/CyberSCI/PastChallenges/tree/main/challenges/regionals-2025-26/web/corpo)
 
 > 本リポジトリには競技の問題ファイル一式は含めていません。問題環境のソースコードは、上記のCyberSCI公式アーカイブを参照してください。本Write-upでは、解説に必要な該当箇所のみを引用しています。自作した Web Shell（`shell.php`）のみ、本リポジトリに含めています。
 
@@ -52,7 +52,82 @@ frontend コンテナ（Apache + PHP 8.1）
 
 ![提供フォルダ構成（tree）](images/01_structure.png)
 
-![docker-compose.yml の構成](images/01b_compose.png)
+`docker-compose.yml` の内容は以下のとおりです（認証情報は REDACTED）。
+
+```yaml
+services:
+  db_hr:
+    build: ./db_hr
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: REDACTED
+      MYSQL_DATABASE: hr
+      MYSQL_USER: hr
+      MYSQL_PASSWORD: hr
+    networks:
+      - db_all
+
+  db_orders:
+    build: ./db_corpo
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: REDACTED
+      MYSQL_DATABASE: corpo
+      MYSQL_USER: corpo
+      MYSQL_PASSWORD: REDACTED
+    networks:
+      - db_all
+      - db_orders
+
+  backend:
+    build: ./backend
+    restart: always
+    depends_on:
+      - db_orders
+    environment:
+      DB_HOST: db_orders
+      DB_NAME: corpo
+      DB_USER: corpo
+      DB_PASS: REDACTED
+      UPLOAD_DIR: /var/www/html/uploads
+    networks:
+      - internal
+      - db_orders
+
+  frontend:
+    build: ./frontend
+    restart: always
+    depends_on:
+      - backend
+    environment:
+      BACKEND_HOST: http://backend
+      UPLOAD_DIR: /var/www/html/uploads
+    networks:
+      - front
+      - internal
+    ports:
+      - "8080:80"
+
+  customer_bot:
+    build: ./customer_bot
+    restart: always
+    depends_on:
+      - frontend
+    environment:
+      FRONTEND_HOST: http://frontend
+      BOT_USERNAME: REDACTED
+      BOT_PASSWORD: REDACTED
+    networks:
+      - front
+
+networks:
+  front:
+  internal:
+  db_all:
+  db_orders:
+```
+
+> このうち `frontend` の `UPLOAD_DIR: /var/www/html/uploads`（Web公開ディレクトリ内）が、後の脆弱性に直結します。
 
 ### 2-2. フロントエンドの素性確認
 
