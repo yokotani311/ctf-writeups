@@ -1,2 +1,37 @@
-# ctf-writeups
-CTF write-ups focusing on vulnerability analysis and defensive countermeasures.
+# CTF Write-ups
+
+セキュリティ学習の一環として取り組んだ CTF（Capture The Flag）の Write-up 集です。
+
+攻撃手法の再現にとどまらず、**「なぜ脆弱性が成立するのか」** と **「防御側としてどう対策するか」** までを整理することを心がけています。攻撃者の視点でコードや挙動を読む経験を、防御（フォレンジック・脆弱性診断）に活かすことを目標としています。
+
+---
+
+## Write-ups
+
+| 大会 | 問題 | カテゴリ | 概要 |
+|---|---|---|---|
+| CyberSCI 2025–26 | [Corporate Complexity (Flag 1)](./CyberSCI-2025-26/corporate-complexity/) | Web | 認証バイパス + 無制限ファイルアップロード → 任意コード実行（RCE） |
+
+> 今後、取り組んだ問題の Write-up を順次追加していきます。
+
+---
+
+## 方針
+
+- **自力で解析・取得した問題**を対象に Write-up を作成しています。
+- 各 Write-up では、攻撃の再現に加えて**防御側の修正案**を必ず記載しています。
+- CTF の問題ファイルそのものは再配布せず、**公式アーカイブへのリンク**で参照し、解説に必要な箇所のみを引用しています。
+- ソースコードの解釈確認や文章の校正に AI を活用した場合は、その旨を各 Write-up に明記しています。
+
+---
+
+## 関連リポジトリ
+
+- [NIST CFReDS — Forensic Investigation](https://github.com/yokotani311/NIST-CFReDS-Forensic-Investigation)
+  ディスクイメージ（EnCase E01）を対象としたホストフォレンジック調査レポート。レジストリ・各種アーティファクトを相関分析し、不正行為者の行動を時系列で再構成した記録です。
+
+---
+
+## About
+
+カナダ・ダグラスカレッジで Cybersecurity を専攻し、デジタルフォレンジック・インシデント対応（DFIR）を中心に学習しています。フォレンジックと脆弱性診断の両面から、セキュリティの実践力を高めることを目指しています。
